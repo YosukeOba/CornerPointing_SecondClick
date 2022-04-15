@@ -1,0 +1,89 @@
+#uselib "winmm"
+
+#module
+#deffunc dimmix array arr
+    mx = length(arr)
+    repeat mx
+        r        = cnt + rnd(mx - cnt)
+        temp     = arr(r)
+        arr(r)   = arr(cnt)
+        arr(cnt) = temp
+    loop
+    return
+#global
+
+screen 0,ginfo(20),ginfo(21),256,0,0
+
+participant = 1
+
+isStart = 0
+startTime = 0
+
+dim A1s,3
+A1s = 200,300,400
+
+dim W1s,3
+W1s = 10, 30, 50
+
+dim Angle1s,4
+Angle1s = 0,30,60,90
+
+dim A2s,1
+A2s = 300
+
+dim W2s,1
+W2s = 30
+
+dim Angle2s,1
+Angle2s = 45
+
+dim hasSecondClicks,2
+hasSecondClick = 0,1
+
+blockTimes = 10
+
+dim  tasks,length(A1s)*length(W1s)*length(Angle1s)*length(A2s)*length(W2s)*length(Angle2s)*length(hasSecondClicks)
+gosub *taskShuffle
+
+A1 = 0
+W1 = 0
+Angle1 = 0
+A2 = 0
+W2 = 0
+Angle2 = 0
+hasSecondClick = 0
+
+*main
+	redraw 0
+	cls
+
+	gosub *term
+	
+	gosub *drawTarget
+	
+	redraw 1
+	await 1
+	goto *main
+
+
+*term
+	A1= A1s((tasks(taskCounter)/(length(hasSecondClicks)*length(Angle2s)*length(W2s)*length(A2s)*length(Angle1s)*length(W1s))))
+	W1 = W1s((tasks(taskCounter)/(length(hasSecondClicks)*length(Angle2s)*length(W2s)*length(A2s)*length(Angle1s)))\length(W1s))
+	Angle1 = Angle1s((tasks(taskCounter)/(length(hasSecondClicks)*length(Angle2s)*length(W2s)*length(A2s)))\length(Angle1s))
+	A2 = A2s((tasks(taskCounter)/(length(hasSecondClicks)*length(Angle2s)*length(W2s)))\length(A2s))
+	W2 = W2s((tasks(taskCounter)/(length(hasSecondClicks)*length(Angle2s)))\length(W2s))
+	Angle2 = Angle2s((tasks(taskCounter)/length(hasSecondClicks))\length(Angl2s))
+	hasSecondClick = hasSecondClicks(tasks(taskCounter)\length(hasSecondClicks))
+
+*taskShuffle
+	repeat length(tasks)
+		tasks.cnt=cnt
+	loop
+	dimmix tasks
+	repeat length(tasks)
+		print "tasks."+ cnt + "=" + tasks(cnt)
+	loop
+	return
+
+*drawTarget
+	
